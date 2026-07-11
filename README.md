@@ -5,6 +5,35 @@
 
 デフォルトでは Grafana が公開している負荷試験デモ用アプリ [QuickPizza](https://github.com/grafana/quickpizza) を対象にしているため、セットアップ後すぐに動かして確認できます。
 
+## このリポジトリでできること
+
+### 負荷パターン（[config/workloads.ts](config/workloads.ts)）
+
+| パターン | 内容 | どんな時に使うか |
+|---|---|---|
+| smoke | 1 VU で30秒だけ実行 | 最小構成での疎通確認（まずこれを実行する） |
+| load | 20 VUs まで2分でランプアップ→5分維持→2分でランプダウン | 想定される平常時トラフィックの再現 |
+| stress | 20→50→100 VUs と段階的に負荷を上げる（計約26分） | システムの限界点（どこから性能劣化するか）を探る |
+| spike | 5→200→5 VUs と短時間で急増・急減させる | 突発的なアクセス集中への耐性を確認する |
+| soak | 20 VUs を約4時間維持 | 長時間稼働によるメモリリーク等の劣化を検出する |
+
+このうち **smoke / load / stress** の3つは [tests/](tests/) 配下にすぐ実行できるテストとして用意済み。spike / soak も設定自体は定義済みなので、同じ要領で `tests/` にテストファイルを追加すればすぐ使える（[新しいテストを追加する](#新しいテストを追加する)を参照）。
+
+### シナリオ（[scenarios/](scenarios/)）
+
+各テストは、以下の再利用可能なシナリオを組み合わせて実行する。
+
+- **ページ閲覧**（[e2e/simple-page-view.ts](scenarios/e2e/simple-page-view.ts)）: トップページと軽量なデータ取得を閲覧する、単純なユーザー行動を再現
+- **API CRUD**（[apis/user-api.ts](scenarios/apis/user-api.ts)）: ユーザー登録 → ログイン → ピザのレコメンド取得 → 評価の作成・更新・削除、という一連のAPI利用の流れを再現
+
+### 実行方法は3通り
+
+- **ローカル**: `mise run test:smoke` 等で手元のマシンから実行（[テストの実行](#テストの実行)）
+- **GitHub Actions**: Actionsタブから1クリックで実行。test_type/environmentを選ぶだけ（[GitHub Actions で実行する](#github-actions-で実行する誰でも1クリック)）
+- **AWS Distributed Load Testing**: 複数リージョン・大規模な同時接続数で分散実行（[AWS Distributed Load Testing での実行](#aws-distributed-load-testing-での実行)）
+
+対象システムはデフォルトで QuickPizza の公開インスタンス（`quickpizza.grafana.com`）だが、[config/environments.ts](config/environments.ts) を書き換えれば自分たちの Web アプリ / API を対象にできる。
+
 ## 必要なもの
 
 [mise](https://mise.jdx.dev/) がインストールされていれば十分です。k6 / Node.js / pnpm のバージョンは [mise.toml](mise.toml) で固定されています。
