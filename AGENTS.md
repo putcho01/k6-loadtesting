@@ -40,7 +40,9 @@ mise でツール・コマンドの両方を管理しています。実行コマ
 │   │   └── api-client.ts
 │   └── utils/helpers.ts           # ユーティリティ関数
 ├── scripts/build.mjs             # AWS DLT 向けにテストを単一JSへバンドルするスクリプト
-├── docs/aws-distributed-load-testing.md  # AWSでの実行手順
+├── docs/
+│   ├── DEVELOPMENT.md             # 自分たちのプロジェクトへの適用手順
+│   └── aws-distributed-load-testing.md  # AWSでの実行手順
 ├── .github/workflows/            # GitHub Actions（1クリック実行 / reusable workflow）
 │   ├── run-load-test.yml
 │   └── k6-reusable-test.yml
@@ -49,7 +51,7 @@ mise でツール・コマンドの両方を管理しています。実行コマ
 └── .gitignore
 ```
 
-テスト対象はデフォルトで Grafana 公式の負荷試験デモアプリ [QuickPizza](https://github.com/grafana/quickpizza) の公開インスタンス（`quickpizza.grafana.com`）。実プロジェクトに適用する際は [config/environments.ts](config/environments.ts) を実環境に差し替える。
+テスト対象はデフォルトで Grafana 公式の負荷試験デモアプリ [QuickPizza](https://github.com/grafana/quickpizza) の公開インスタンス（`quickpizza.grafana.com`）。実プロジェクトに適用する手順（環境URL・APIクライアント・負荷パターン・シナリオの差し替え）は [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) を参照。
 
 ## 特徴
 - 負荷パターン: smoke/load/stress/spike/soakテストの設定

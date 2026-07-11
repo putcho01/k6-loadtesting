@@ -32,7 +32,7 @@
 - **GitHub Actions**: Actionsタブから1クリックで実行。test_type/environmentを選ぶだけ（[GitHub Actions で実行する](#github-actions-で実行する誰でも1クリック)）
 - **AWS Distributed Load Testing**: 複数リージョン・大規模な同時接続数で分散実行（[AWS Distributed Load Testing での実行](#aws-distributed-load-testing-での実行)）
 
-対象システムはデフォルトで QuickPizza の公開インスタンス（`quickpizza.grafana.com`）だが、[config/environments.ts](config/environments.ts) を書き換えれば自分たちの Web アプリ / API を対象にできる。
+対象システムはデフォルトで QuickPizza の公開インスタンス（`quickpizza.grafana.com`）だが、[config/environments.ts](config/environments.ts) を書き換えれば自分たちの Web アプリ / API を対象にできる。自分たちのプロジェクトに適用する具体的な手順は [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) を参照。
 
 ## 必要なもの
 
@@ -69,7 +69,9 @@ mise run test:smoke  # smoke テストを実行
 │   │   └── api-client.ts
 │   └── utils/helpers.ts             # ユーティリティ関数
 ├── scripts/build.mjs                # AWS DLT 向けにテストを単一JSへバンドルするスクリプト
-├── docs/aws-distributed-load-testing.md  # AWSでの実行手順
+├── docs/
+│   ├── DEVELOPMENT.md               # 自分たちのプロジェクトへの適用手順
+│   └── aws-distributed-load-testing.md  # AWSでの実行手順
 └── .github/workflows/               # GitHub Actions
     ├── run-load-test.yml            # workflow_dispatch（1クリック実行）
     └── k6-reusable-test.yml         # reusable workflow
