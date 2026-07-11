@@ -1,0 +1,41 @@
+name: k6 Reusable Test
+
+on:
+  workflow_call:
+    inputs:
+      test_type:
+        description: "実行するテスト種別 (smoke/load/stress)"
+        type: string
+        required: true
+      environment:
+        description: "対象環境 (dev/staging/production)"
+        type: string
+        required: true
+        default: dev
+    secrets:
+      K6_CLOUD_TOKEN:
+        required: false
+      K6_CLOUD_PROJECT_ID:
+        required: false
+
+jobs:
+  k6-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+        with:
+          k6-version: "2.1.0"
+
+      - name: Run k6 ${{ inputs.test_type }} test against ${{ inputs.environment }}
+        uses: grafana/run-k6-action@v1
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+          K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
+        with:
+          path: |
+            ./tests/${{ inputs.test_type }}/*.ts

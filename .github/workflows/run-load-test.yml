@@ -1,0 +1,33 @@
+name: Run Load Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: "実行するテスト種別"
+        type: choice
+        required: true
+        default: smoke
+        options:
+          - smoke
+          - load
+          - stress
+      environment:
+        description: "対象環境"
+        type: choice
+        required: true
+        default: dev
+        options:
+          - dev
+          - staging
+          - production
+
+jobs:
+  call-k6-test:
+    uses: ./.github/workflows/k6-reusable-test.yml
+    with:
+      test_type: ${{ inputs.test_type }}
+      environment: ${{ inputs.environment }}
+    secrets:
+      K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
+      K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
