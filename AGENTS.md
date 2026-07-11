@@ -18,40 +18,38 @@ k6 を利用した負荷試験基盤サンプルを整備してください
 など
 
 ## コマンド
-mise を利用したツール・コマンド管理を行います。
-
+mise でツール・コマンドの両方を管理しています。実行コマンドはすべて [mise.toml](mise.toml) に `mise run <task>` として定義済みです（`setup` / `test:smoke` / `test:load` / `test:stress` / `build` / `typecheck`）。シェルの `mise activate` 設定に関わらず、mise が管理するバージョンの node/k6/pnpm を解決して実行されます。使い方の詳細は [README.md](README.md) を参照してください。
 
 ## ディレクトリ構成
 ```
 .
-├── config/              # 設定ファイル
-│   ├── workloads.ts     # 負荷パターン設定（smoke, load, stress等）
-│   ├── environments.ts  # 環境別設定（dev, staging, production）
-│   └── settings.ts      # 共通設定
-├── scenarios/           # 再利用可能なシナリオ
-│   ├── e2e/            # エンドツーエンドシナリオ
-│   │   └── simple-page-view.ts
-│   └── apis/           # APIシナリオ
-│       └── user-api.ts
-├── tests/              # 実際のテストファイル
-│   ├── smoke/          # スモークテスト
-│   │   └── demo-smoke-test.ts
-│   ├── load/           # 負荷テスト
-│   │   └── demo-load-test.ts
-│   └── stress/         # ストレステスト
-│       └── demo-stress-test.ts
-├── lib/                # 再利用可能なモジュール
-│   ├── clients/        # APIクライアント
+├── config/                       # 設定ファイル
+│   ├── workloads.ts               # 負荷パターン設定（smoke/load/stress/spike/soak）
+│   ├── environments.ts            # 環境別設定（local/dev/staging/production）
+│   └── settings.ts                # 共通設定（閾値・デフォルトヘッダー等）
+├── scenarios/                    # 再利用可能なシナリオ
+│   ├── e2e/simple-page-view.ts    # ページ閲覧シナリオ
+│   └── apis/user-api.ts           # ユーザー登録〜APIのCRUDシナリオ
+├── tests/                        # 実際のテストファイル
+│   ├── smoke/demo-smoke-test.ts
+│   ├── load/demo-load-test.ts
+│   └── stress/demo-stress-test.ts
+├── lib/                          # 再利用可能なモジュール
+│   ├── clients/                   # APIクライアント
 │   │   ├── base-client.ts
 │   │   └── api-client.ts
-│   └── utils/          # ユーティリティ関数
-│       └── helpers.ts
-├── data/               # テストデータ（オプション）
-├── package.json
-├── tsconfig.json
-├── mise.toml           # コマンド・ツール管理
+│   └── utils/helpers.ts           # ユーティリティ関数
+├── scripts/build.mjs             # AWS DLT 向けにテストを単一JSへバンドルするスクリプト
+├── docs/aws-distributed-load-testing.md  # AWSでの実行手順
+├── .github/workflows/            # GitHub Actions（1クリック実行 / reusable workflow）
+│   ├── run-load-test.yml
+│   └── k6-reusable-test.yml
+├── package.json / tsconfig.json / pnpm-lock.yaml / pnpm-workspace.yaml
+├── mise.toml                     # ツールバージョン・mise run タスク定義
 └── .gitignore
 ```
+
+テスト対象はデフォルトで Grafana 公式の負荷試験デモアプリ [QuickPizza](https://github.com/grafana/quickpizza) の公開インスタンス（`quickpizza.grafana.com`）。実プロジェクトに適用する際は [config/environments.ts](config/environments.ts) を実環境に差し替える。
 
 ## 特徴
 - 負荷パターン: smoke/load/stress/spike/soakテストの設定
@@ -89,6 +87,5 @@ loginDuration.add(response.timings.duration);
 ```
 
 ## AWS Distributed Load Testingでの実行
-ローカルでの動作確認が完了したら、AWS基盤で本格的な負荷試験を実行します
-### スクリプトのアップロード
-### Traffic Shape（負荷設定）
+ローカルでの動作確認が完了したら、AWS基盤で本格的な負荷試験を実行します。
+具体的な手順（`mise run build` によるスクリプトのバンドル、Traffic Shape 設定時の注意点等）は [docs/aws-distributed-load-testing.md](docs/aws-distributed-load-testing.md) を参照。
