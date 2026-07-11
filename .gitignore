@@ -141,3 +141,10 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# k6 loadtesting
+dist/
+results/
+*.k6.json
+*.k6.html
+

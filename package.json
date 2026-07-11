@@ -1,0 +1,19 @@
+{
+  "name": "k6-loadtesting",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "k6 を用いた負荷試験基盤サンプル",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "node scripts/build.mjs",
+    "test:smoke": "k6 run tests/smoke/demo-smoke-test.ts",
+    "test:load": "k6 run tests/load/demo-load-test.ts",
+    "test:stress": "k6 run tests/stress/demo-stress-test.ts"
+  },
+  "devDependencies": {
+    "@types/k6": "2.0.0",
+    "esbuild": "0.28.1",
+    "typescript": "7.0.2"
+  }
+}

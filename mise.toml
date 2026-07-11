@@ -1,0 +1,31 @@
+[tools]
+# 各 tool の version を指定することで、mise install 実行時に環境が整う
+node = "26.5.0"
+k6 = "2.1.0"
+pnpm = "11"
+
+# `mise run <task>` で実行するとシェルの PATH 設定（mise activate/shims）に
+# 依存せず、mise が管理するバージョンの node/k6/pnpm を使って実行できる。
+[tasks.setup]
+description = "依存パッケージをインストールする"
+run = "pnpm install"
+
+[tasks."test:smoke"]
+description = "smoke テストを実行する"
+run = "pnpm run test:smoke"
+
+[tasks."test:load"]
+description = "load テストを実行する"
+run = "pnpm run test:load"
+
+[tasks."test:stress"]
+description = "stress テストを実行する"
+run = "pnpm run test:stress"
+
+[tasks.build]
+description = "AWS Distributed Load Testing 向けにテストを単一JSへバンドルする"
+run = "pnpm run build"
+
+[tasks.typecheck]
+description = "型チェックを実行する"
+run = "pnpm run typecheck"
