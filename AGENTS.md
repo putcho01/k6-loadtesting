@@ -1,21 +1,9 @@
 # k6-loadtesting
 
 [k6](https://github.com/grafana/k6) を用いた負荷試験基盤サンプルレポジトリです。
+[Grafana k6のベストプラクティス](https://grafana.com/blog/organizing-your-grafana-k6-performance-testing-suite-best-practices-to-get-started/)に沿って、設定・シナリオ・テストを分離した構成にしています。
 
-
-## 指示
-k6 を利用した負荷試験基盤サンプルを整備してください
-[Grafana k6のベストプラクティス](https://grafana.com/blog/organizing-your-grafana-k6-performance-testing-suite-best-practices-to-get-started/)に沿った構成にすること
-
-### 要件
-- ローカルでの負荷試験を行うことができること
-- AWS Distributed Load Testingで実行できる・手順が記載されていること
-
-### その他
-- 誰でも負荷試験が行えるように、ハードルが下がるようなものにすること
-  - Actions で1クリック実行/resuable workflow による共通化
-  - 手順がわかりやすく簡潔な文章のドキュメント整備
-など
+ローカル実行・GitHub Actionsでの1クリック実行・AWS Distributed Load Testingでの分散実行のいずれからも、誰でもハードルなく負荷試験を行えることを重視しています。この方針に沿って、変更を加える際は手順やドキュメントも簡潔・平易な文章に保ってください。
 
 ## コマンド
 mise でツール・コマンドの両方を管理しています。実行コマンドはすべて [mise.toml](mise.toml) に `mise run <task>` として定義済みです（`setup` / `test:smoke` / `test:load` / `test:stress` / `build` / `typecheck`）。シェルの `mise activate` 設定に関わらず、mise が管理するバージョンの node/k6/pnpm を解決して実行されます。使い方の詳細は [README.md](README.md) を参照してください。
